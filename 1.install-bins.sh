@@ -13,6 +13,7 @@ systemctl stop firewalld || true
 systemctl disable firewalld || true
 
 # Disabled SELinux - need reboot.
+setenforce 0
 sed -i --follow-symlinks 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux && cat /etc/sysconfig/selinux
 
 # Check Command
