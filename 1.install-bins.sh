@@ -12,6 +12,9 @@ USER=$(stat -c '%U' $(readlink -f "$0"))
 systemctl stop firewalld || true
 systemctl disable firewalld || true
 
+# Disabled SELinux - need reboot.
+sed -i --follow-symlinks 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux && cat /etc/sysconfig/selinux
+
 # Check Command
 function check_command() {
   COMMAND="$1"
@@ -34,6 +37,7 @@ usermod -aG docker ${USER}
 
 cp -f packages/scripts/docker.service /lib/systemd/system/docker.service
 cp -f packages/scripts/docker.socket /lib/systemd/system/docker.socket
+chmod +x packages/docker/* packages/bin/*
 cp -f packages/docker/* /usr/bin/
 cp -f packages/bin/* /usr/bin/
 
